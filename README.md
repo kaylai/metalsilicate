@@ -1,7 +1,7 @@
 # metalsilicate
 Python library for processing a metal-silicate partitioning database and data from completed gas levitation laser melting experiments to develop a thermodynamic model for Si partitioning between silicate melt and Fe-rich metal in support of assessing the cataclysmic reduction hypothesis for Mercury’s origin
 
-# 📅 Project Timeline
+# 📅 metalsilicate Project Timeline
 
 ## Gantt Chart
 ```mermaid
@@ -10,27 +10,27 @@ gantt
     dateFormat  YYYY-MM-DD
     axisFormat  %b %d
     excludes    weekends
-	tickInterval 1month
-	
+    tickInterval 1month
+    
     section Setup & Planning
-    	Project Initialization       :done,    init,    2025-04-15, 1d
-    	Requirements & Planning      :active,  plan,    2025-04-17, 15d
-		
+        Project Initialization       :done,    init,    2025-04-15, 1d
+        Requirements & Planning      :active,  plan,    2025-04-17, 15d
+        
     section Development
-    	Core Development Begins      :active,  dev,     2025-04-17, 33d
-    	Documentation Setup          :         docs,    2025-04-28, 23d
-    	Testing and QA               :         test,    2025-04-28, 60d
-		
+        Core Development Begins      :active,  dev,     2025-04-17, 33d
+        Documentation Setup          :         docs,    2025-04-28, 23d
+        Testing and QA               :         test,    2025-04-28, 60d
+        
     section Review & Release
-    	Customer Feedback            :         feedback,2025-06-27, 21d
-    	Packaging and Release        :         release, 2025-06-30, 18d
-		
+        Customer Feedback            :         feedback,2025-06-27, 21d
+        Packaging and Release        :         release, 2025-06-30, 18d
+        
     section Manuscript Work
-    	Science Manuscript Docs      :active,  scidoc,  2025-04-15, 95d
-    	First Delivery: Science MS   :         sci_del, 2025-07-18, 1d
-    	Code Manuscript Docs         :         codedoc, 2025-05-22, 75d
-    	Code MS Submission & Rev.    :         codesub, 2025-08-05, 15d
-    	Final Delivery: Code MS      :         final,   2025-08-20, 1d
+        Science Manuscript Docs      :active,  scidoc,  2025-04-15, 95d
+        First Delivery: Science MS   :         sci_del, 2025-07-18, 1d
+        Code Manuscript Docs         :         codedoc, 2025-05-22, 75d
+        Code MS Submission & Rev.    :         codesub, 2025-08-05, 15d
+        Final Delivery: Code MS      :         final,   2025-08-20, 1d
 ```
 
 ---
@@ -94,7 +94,7 @@ Present the working prototype to stakeholders for early input. Feedback will sha
 
 ### 📦 Packaging & Release  
 **Task:** Prepare the library for distribution.  
-Package the code for internal or public release, including versioning, metadata, and installation instructions. If desired, publish to PyPI or provide archive for customer use.
+Package the code for internal or public release, including versioning, metadata, and installation instructions. Publish to PyPI and provide zenodo archive for customer use.
 
 ---
 
