@@ -1,3 +1,5 @@
+from mendeleev import element
+
 #----------SOME UNIVERSAL DEFINITIONS----------#
 OxygenNum = {'Al2O3': 3,'CaO': 1, 'Cl': 0, 'CO2': 2, 'CoO': 1, 'Cr2O3': 3,'CuO': 1, 'F': 0,
              'Fe2O3': 3,'FeO': 1, 'Ga2O3': 3,'H2O': 1, 'K2O': 1, 'MgO': 1, 'MnO': 1, 'MoO2': 2,
@@ -33,7 +35,8 @@ trunc_elements = elements.copy()
 trunc_elements.remove('Fe3')
 elementMass = {i : element(i).atomic_weight for i in trunc_elements}
 elementMass.update({'Fe3': element('Fe').atomic_weight})
-oxideMass = {k: CationNum[k]*elementMass[v]+OxygenNum[k]*element('O').atomic_weight for k, v in oxides_to_cations.items()}
+oxideMass = {k: CationNum[k]*elementMass[v]+OxygenNum[k]*element('O').atomic_weight for k, v in
+			 oxides_to_cations.items()}
 
 """Other standard values"""
 corgne_species = ['Ni', 'Cu', 'Si', 'Mn', 'Cr', 'Ga', 'Nb', 'Ta']
