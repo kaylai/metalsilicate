@@ -1,4 +1,6 @@
-from metalsilicate import core
+from metalsilicate import core, sample_class, batchfile
+import pandas as pd
+import numpy as np
 
 #---------SOME DATA TRANSFORMATION METHODS--------#
 def get_oxides(sample):
@@ -90,9 +92,9 @@ def normalize(sample):
 
 	def multi_normalize(sample):
 		multi_sample = sample.copy()
-		multi_sample["Sum"] = sum([multi_sample[oxide] for oxide in oxides])
+		multi_sample["Sum"] = sum([multi_sample[oxide] for oxide in core.oxides])
 		for column in multi_sample:
-			if column in oxides:
+			if column in core.oxides:
 				multi_sample[column] = 100.0*multi_sample[column]/multi_sample["Sum"]
 
 		del multi_sample["Sum"]
@@ -105,7 +107,7 @@ def normalize(sample):
 		_sample = pd.Series(sample.copy())
 		sample_dict = sample.to_dict()
 		return pd.Series(single_normalize(sample_dict))
-	elif isinstance(sample, ExcelFile):
+	elif isinstance(sample, batchfile.ExcelFile):
 		_sample = sample
 		data = _sample.data
 		return multi_normalize(data)
@@ -134,7 +136,7 @@ def wtpercentElements_to_molElements(sample_elements):
 			elementslist = list(sample_elements.index)
 
 		for element in elementslist:
-			molElements[element] = sample_elements[element]/elementMass[element]
+			molElements[element] = sample_elements[element]/core.elementMass[element]
 
 		if type(sample_elements) == pd.core.series.Series:
 			molElements = pd.Series(molElements)
@@ -146,9 +148,9 @@ def wtpercentElements_to_molElements(sample_elements):
 
 		return molElements
 
-	elif isinstance(sample, pd.DataFrame):
-		data = sample
-		for key, value in elementMass.items():
+	elif isinstance(sample_class.sample, pd.DataFrame):
+		data = sample_class.sample
+		for key, value in core.elementMass.items():
 			data.loc[:, key] /= value
 
 		data["MPSum"] = sum([data[element] for element in sample_elements])
@@ -160,7 +162,7 @@ def wtpercentElements_to_molElements(sample_elements):
 		return data
 
 	else:
-		raise InputError("The composition input must be a pandas Series or dictionary.")
+		raise core.InputError("The composition input must be a pandas Series or dictionary.")
 
 def wtpercentOxides_to_molOxides(sample_oxides):
 	""" Takes in a pandas Series or dict containing major element oxides in wt%, and converts it
@@ -184,7 +186,7 @@ def wtpercentOxides_to_molOxides(sample_oxides):
 			oxideslist = list(sample_oxides.index)
 
 		for ox in oxideslist:
-			molOxides[ox] = sample_oxides[ox]/oxideMass[ox]
+			molOxides[ox] = sample_oxides[ox]/core.oxideMass[ox]
 
 		if type(sample_oxides) == pd.core.series.Series:
 			molOxides = pd.Series(molOxides)
@@ -196,9 +198,9 @@ def wtpercentOxides_to_molOxides(sample_oxides):
 
 		return molOxides
 
-	elif isinstance(sample, pd.DataFrame):
-		data = sample
-		for key, value in oxideMass.items():
+	elif isinstance(sample_class.sample, pd.DataFrame):
+		data = sample_class.sample
+		for key, value in core.oxideMass.items():
 			data.loc[:, key] /= value
 
 		data["MPOSum"] = sum([data[oxide] for oxide in sample_oxides])
@@ -210,7 +212,7 @@ def wtpercentOxides_to_molOxides(sample_oxides):
 		return data
 
 	else:
-		raise InputError("The composition input must be a pandas Series or dictionary.")
+		raise core.InputError("The composition input must be a pandas Series or dictionary.")
 
 def wtpercentOxides_to_molSingleO(sample_oxides,exclude_volatiles=False):
 	""" Takes in a pandas Series containing major element oxides in wt%, and constructs
@@ -233,14 +235,14 @@ def wtpercentOxides_to_molSingleO(sample_oxides,exclude_volatiles=False):
 	elif type(sample_oxides) == pd.core.series.Series:
 		oxideslist = list(sample_oxides.index)
 	else:
-		raise InputError("The composition input must be a pandas Series or dictionary.")
+		raise core.InputError("The composition input must be a pandas Series or dictionary.")
 
 	total_O = 0.0
 	for ox in oxideslist:
 		if exclude_volatiles == False or (ox != 'H2O' and ox != 'CO2'):
-			cation = oxides_to_cations[ox]
-			molCations[cation] = CationNum[ox]*sample_oxides[ox]/oxideMass[ox]
-			total_O += OxygenNum[ox]*sample_oxides[ox]/oxideMass[ox]
+			cation = sample_class.oxides_to_cations[ox]
+			molCations[cation] = core.CationNum[ox]*sample_oxides[ox]/core.oxideMass[ox]
+			total_O += core.OxygenNum[ox]*sample_oxides[ox]/core.oxideMass[ox]
 	if type(sample_oxides) == pd.core.series.Series:
 		molCations = pd.Series(molCations)
 		molCations = molCations/total_O
@@ -248,7 +250,7 @@ def wtpercentOxides_to_molSingleO(sample_oxides,exclude_volatiles=False):
 		# total = np.sum(list(molCations.values()))
 		for ox in oxideslist:
 			if exclude_volatiles == False or (ox != 'H2O' and ox != 'CO2'):
-				cation = oxides_to_cations[ox]
+				cation = sample_class.oxides_to_cations[ox]
 				molCations[cation] = molCations[cation]/total_O
 
 	return molCations
@@ -266,7 +268,7 @@ def oxides_to_elements(sample_oxides):
 	original_sum = sum(sample_oxides.values())
 
 	for oxide in sample_oxides:
-		element = oxides_to_cations[oxide]
+		element = sample_class.oxides_to_cations[oxide]
 		conversion_factor = core.CationNum[oxide]*core.elementMass[element]/core.oxideMass[oxide]
 		converted_sample[element] = sample_oxides[oxide] * conversion_factor
 
@@ -288,7 +290,7 @@ def elements_to_oxides(sample_elements):
 	converted_sample = {}
 
 	for element in sample_elements:
-		oxide = cations_to_oxides[element]
+		oxide = sample_class.cations_to_oxides[element]
 		conversion_factor = core.CationNum[oxide]*core.elementMass[element]/core.oxideMass[oxide]
 		converted_sample[oxide] = sample_elements[element] / conversion_factor
 

@@ -4,9 +4,9 @@ import numpy as np
 from metalsilicate import core
 from metalsilicate import sample_class
 
-from parameters import opticalbasicity as ob
-from parameters import interactionparameters as ip
-from parameters import activitycoefficients as ac
+from metalsilicate.parameters import opticalbasicity as ob
+from metalsilicate.parameters import interactionparameters as ip
+from metalsilicate.parameters import activitycoefficients as ac
 
 def calc_ln_gamma_naught_at_temperature(species, temperature):
 	"""
